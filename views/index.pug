@@ -1,0 +1,38 @@
+doctype html  
+html(lang='en')  
+    head
+        meta(charset='utf-8')
+        meta(http-equiv="X-UA-Compatible",content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="css/bootstrap.min.css")
+        link(rel="stylesheet", href="js/dropzone.min.css")
+        title Upload files
+    body
+        div(class="container pt-5")
+            div(class="from-group text-center mb-5")
+                h2 File upload example
+                h6(class="text-success") node, express, multer and dropzone
+            div(class="from-group col-md-8 mr-auto ml-auto mb-3")
+                div(id="dropzoneMulti", class="dropzone", style="border-style: dashed")
+            div(class="from-group col-md-6 m-auto")
+                button(id="btn_upload",class="btn btn-lg btn-block btn-success ") Upload
+            
+        script(src="js/dropzone.min.js")
+        script.
+            Dropzone.autoDiscover = false;
+            let dropzoneMulti = new Dropzone("#dropzoneMulti", {
+                    url: "/upload",
+                    addRemoveLinks: true,
+                    autoProcessQueue: false,
+                    uploadMultiple: true,
+                    parallelUploads: 10,
+                    dictDefaultMessage: "Choose a file or Drag and Drop",
+                    dictRemoveFile: "Remove",
+                    paramName: 'file',
+                    method: 'post',
+                    acceptedFiles: 'image/*,application/pdf'                   
+                });
+            document.getElementById('btn_upload').addEventListener('click', ()=>{ dropzoneMulti.processQueue();})
+            
+
+           
