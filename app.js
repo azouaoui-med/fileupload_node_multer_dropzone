@@ -19,13 +19,30 @@ const storage = multer.diskStorage({
         cb(null, './uploads');
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname));
+        cb(null, file.originalname.replace(/\.[^/.]+$/, "") + '-' + Date.now() + path.extname(file.originalname));
     }
 });
 
 // set up upload method
 const upload = multer({
-    storage
+    storage,
+    limits: {
+        fileSize: 1000000, // max size of files to upload / bytes        
+        files:10
+    },
+    fileFilter: function (req, file, cb) {
+        const fileTypes = /jpeg|jpg|png|pdf/;
+        const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimeType = fileTypes.test(file.mimetype);
+
+        if (extname && mimeType) {
+            return cb(null, true);
+        } else {
+            return cb('File type not allowed ');
+        }
+
+    }
+
 }).any();
 
 // set up the route for the upload
